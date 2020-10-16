@@ -51,16 +51,20 @@ class HomeFragment : Fragment() {
             FancyItem(4, 8)
         )
 
-        val section = Section().apply {
-            setHeader(ExpandableHeaderItem("expand"))
-            addAll(fancies)
+//        val section = Section().apply {
+//            setHeader(ExpandableHeaderItem("expand"))
+//            addAll(fancies)
+//        }
+//        val section2 = Section().apply {
+//            setHeader(ExpandableHeaderItem("expand2"))
+//            addAll(fancies)
+//        }
+        ExpandableGroup(ExpandableHeaderItem("expand")).apply {
+            add(Section(fancies))
+            groupAdapter.add(this)
         }
-        val section2 = Section().apply {
-            setHeader(ExpandableHeaderItem("expand2"))
-            addAll(fancies)
-        }
-        groupAdapter.add(section)
-        groupAdapter.add(section2)
+        //groupAdapter.add(section)
+        //groupAdapter.add(section2)
         recycler_view.apply {
             layoutManager = LinearLayoutManager(activity as MainActivity)
             adapter = groupAdapter
