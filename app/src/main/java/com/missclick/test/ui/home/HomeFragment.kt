@@ -2,6 +2,7 @@ package com.missclick.test.ui.home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 import java.util.*
@@ -50,17 +52,9 @@ class HomeFragment : Fragment() {
             FancyItem(4, 3),
             FancyItem(4, 8)
         )
-
-//        val section = Section().apply {
-//            setHeader(ExpandableHeaderItem("expand"))
-//            addAll(fancies)
-//        }
-//        val section2 = Section().apply {
-//            setHeader(ExpandableHeaderItem("expand2"))
-//            addAll(fancies)
-//        }
-        ExpandableGroup(ExpandableHeaderItem("expand")).apply {
-            add(Section(fancies))
+        val sect = Section(fancies)
+        val exp = ExpandableGroup(ExpandableHeaderItem("expand")).apply {
+            add(sect)
             groupAdapter.add(this)
         }
         //groupAdapter.add(section)
@@ -69,7 +63,21 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity as MainActivity)
             adapter = groupAdapter
         }
-
+        (activity as MainActivity).fab.setOnClickListener {
+            Log.e("fab","works!")
+//            exp.removeAll(sect)
+//            groupAdapter.notifyDataSetChanged()
+            val fancies1 = listOf(FancyItem(4, 4),
+                FancyItem(4, 4)
+            )
+//            exp.onChanged(Section(fancies1))
+//            exp.remove(sect)
+//            exp.notifyChanged()
+//            exp.removeAll()
+            exp.notifyChanged()
+            groupAdapter.notifyDataSetChanged()
+//            exp.add(Section(fancies))
+        }
 
     }
 
