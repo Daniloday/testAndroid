@@ -19,6 +19,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    androidExtensions {
+        experimental = true
+    }
 
     buildTypes {
         release {

@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.missclick.test.MainActivity
 import com.missclick.test.R
 import com.missclick.test.ui.ExpandableHeaderItem
@@ -17,6 +19,7 @@ import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.fragment_home.*
 
 import java.util.*
 
@@ -39,57 +42,34 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val groupAdapter = GroupAdapter<ViewHolder>()
+        val fancies = listOf(FancyItem(4, 5),
+            FancyItem(4, 7),
+            FancyItem(4, 3),
+            FancyItem(4, 8)
+        )
 
-        val boringFancyItems = generateFancyItems(6)
-        val excitingFancyItems = generateFancyItems(12)
-
-        val groupAdapter = GroupAdapter<ViewHolder>().apply {
-            spanCount = 3
+        val section = Section().apply {
+            setHeader(ExpandableHeaderItem("expand"))
+            addAll(fancies)
         }
-        val rv = findViewById<RecyclerView>(R.id.recycler_view)
-
+        val section2 = Section().apply {
+            setHeader(ExpandableHeaderItem("expand2"))
+            addAll(fancies)
+        }
+        groupAdapter.add(section)
+        groupAdapter.add(section2)
         recycler_view.apply {
-            layoutManager = GridLayoutManager((activity as MainActivity), groupAdapter.spanCount).apply {
-                spanSizeLookup = groupAdapter.spanSizeLookup
-            }
+            layoutManager = LinearLayoutManager(activity as MainActivity)
             adapter = groupAdapter
         }
 
-        ExpandableGroup(ExpandableHeaderItem("Boring Group"), true).apply {
-            add(Section(boringFancyItems))
-            groupAdapter.add(this)
-        }
-
-        ExpandableGroup(ExpandableHeaderItem("Exciting Group"), false).apply {
-            excitingSection.addAll(excitingFancyItems)
-            add(excitingSection)
-            groupAdapter.add(this)
-        }
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val sectionsPagerAdapter =
-            SectionsPagerAdapter(
-                activity as MainActivity,
-                childFragmentManager
-            )
-        viewPager.adapter = sectionsPagerAdapter
 
-
-    }
-
-    private fun generateFancyItems(count: Int): MutableList<FancyItem>{
-        val rnd = Random()
-        return MutableList(count){
-            val color = Color.argb(255, rnd.nextInt(256),
-                rnd.nextInt(256), rnd.nextInt(256))
-            FancyItem(color, rnd.nextInt(100))
-        }
-    }
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {
 //        // Inflate the menu; this adds items to the action bar if it is present.
